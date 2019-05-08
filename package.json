@@ -8,25 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Emjei-lee/my_app.git"
+    "url": "git+https://github.com/imtaekh/my_app.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Emjei-lee/my_app/issues"
+    "url": "https://github.com/imtaekh/my_app/issues"
   },
-  "homepage": "https://github.com/Emjei-lee/my_app#readme",
+  "homepage": "https://github.com/imtaekh/my_app#readme",
   "dependencies": {
-    "async": "^2.6.2",
+    "async": "^1.5.2",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.14.1",
     "connect-flash": "^0.1.1",
-    "ejs": "^2.6.1",
-    "express": "^4.16.4",
-    "express-session": "^1.16.1",
-    "method-override": "^3.0.0",
-    "mongoose": "^5.5.5",
-    "passport": "^0.4.0",
+    "ejs": "^2.3.3",
+    "express": "^4.13.3",
+    "express-session": "^1.12.1",
+    "method-override": "^2.3.5",
+    "mongoose": "^4.1.7",
+    "passport": "^0.3.2",
     "passport-local": "^1.0.0"
   }
 }
