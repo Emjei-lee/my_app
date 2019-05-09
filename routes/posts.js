@@ -2,25 +2,40 @@ var express  = require('express');
 var router   = express.Router();
 var mongoose = require('mongoose');
 var Post     = require('../models/Post');
+var Counter  = require('../models/Counter');
+var async    = require('async');
 
 router.get('/', function(req,res){
-  var page = Math.max(1,req.query.page);
-  var limit = 4;
+  var vistorCounter = null;
+  var page = Math.max(1,req.query.page)>1?parseInt(req.query.page):1;
+  var limit = Math.max(1,req.query.limit)>1?parseInt(req.query.limit):10;
   var search = createSearch(req.query);
 
-  Post.count(search.findPost, function(err,count){
-    if(err) return res.json({success:false, message:err});
-    var skip = (page-1)*limit;
-    var maxPage = Math.ceil(count/limit);
-    Post.find(search.findPost).populate("author").sort('-createdAt').skip(skip).limit(limit).exec(function (err,posts) {
+  async.waterfall([function(callback){
+      Counter.findOne({name:"vistors"}, function (err,counter) {
+        if(err) callback(err);
+        vistorCounter = counter;
+        callback(null);
+      });
+    },function(callback){
+      Post.count(search.findPost,function(err,count){
+        if(err) callback(err);
+        skip = (page-1)*limit;
+        maxPage = Math.ceil(count/limit);
+        callback(null, skip, maxPage);
+      });
+    },function(skip, maxPage, callback){
+      Post.find(search.findPost).populate("author").sort('-createdAt').skip(skip).limit(limit).exec(function (err,posts) {
+        if(err) callback(err);
+        return res.render("posts/index",{
+          posts:posts, user:req.user, page:page, maxPage:maxPage,
+          urlQuery:req._parsedUrl.query, search:search,
+          counter:vistorCounter, postsMessage:req.flash("postsMessage")[0]
+        });
+      });
+    }],function(err){
       if(err) return res.json({success:false, message:err});
-      res.render("posts/index",{
-            posts:posts, user:req.user, page:page, maxPage:maxPage,
-            search:search,
-            postsMessage:req.flash("postsMessage")[0]
-          });
     });
-  });
 }); // index
 router.get('/new', isLoggedIn, function(req,res){
   res.render("posts/new", {user:req.user});
@@ -35,7 +50,7 @@ router.post('/', isLoggedIn, function(req,res){
 router.get('/:id', function(req,res){
   Post.findById(req.params.id).populate("author").exec(function (err,post) {
     if(err) return res.json({success:false, message:err});
-    res.render("posts/show", {post:post, page:req.query.page, user:req.user});
+    res.render("posts/show", {post:post, urlQuery:req._parsedUrl.query, user:req.user});
   });
 }); // show
 router.get('/:id/edit', isLoggedIn, function(req,res){
@@ -72,7 +87,7 @@ module.exports = router;
 
 function createSearch(queries){
   var findPost = {};
-  if(queries.searchType && queries.searchText && queries.searchText.length >= 2){
+  if(queries.searchType && queries.searchText && queries.searchText.length >= 3){
     var searchTypes = queries.searchType.toLowerCase().split(",");
     var postQueries = [];
     if(searchTypes.indexOf("title")>=0){
