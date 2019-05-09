@@ -8,7 +8,7 @@ var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 
 // database
-mongoose.connect('mongodb://localhost:27017/testDB',{useNewUrlParser : true});
+mongoose.connect('mongodb://localhost:27017/testDB',{useNewUrlParser : true, useCreateIndex: true});
 var db = mongoose.connection;
 db.once("open",function () {
   console.log("DB connected!");
@@ -26,7 +26,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(flash());
-app.use(session({secret:'MySecret'}));
+app.use(session({
+  secret:'MySecret',
+  resave: true,
+  saveUninitialized: true
+}));
 
 // passport
 var passport = require('./config/passport');
@@ -39,6 +43,7 @@ app.use('/users', require('./routes/users'));
 app.use('/posts', require('./routes/posts'));
 
 // start server
-app.listen(3000, function(){
+var port = process.env.PORT || 3000;
+app.listen(port, function(){
   console.log('Server On!');
 });
