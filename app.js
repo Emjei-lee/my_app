@@ -6,7 +6,7 @@ var session  = require('express-session');
 var flash    = require('connect-flash');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
-
+mongoose.Promise = global.Promise
 // database
 mongoose.connect('mongodb://localhost:27017/testDB',{useNewUrlParser : true, useCreateIndex: true});
 var db = mongoose.connection;

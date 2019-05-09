@@ -6,14 +6,18 @@ var Post     = require('../models/Post');
 router.get('/', function(req,res){
   var page = Math.max(1,req.query.page);
   var limit = 4;
-  Post.count({},function(err,count){
+  var search = createSearch(req.query);
+
+  Post.count(search.findPost, function(err,count){
     if(err) return res.json({success:false, message:err});
     var skip = (page-1)*limit;
     var maxPage = Math.ceil(count/limit);
-    Post.find().populate("author").sort('-createdAt').skip(skip).limit(limit).exec(function (err,posts) {
+    Post.find(search.findPost).populate("author").sort('-createdAt').skip(skip).limit(limit).exec(function (err,posts) {
       if(err) return res.json({success:false, message:err});
       res.render("posts/index",{
-            posts:posts, user:req.user, page:page, maxPage:maxPage, postsMessage:req.flash("postsMessage")[0]
+            posts:posts, user:req.user, page:page, maxPage:maxPage,
+            search:search,
+            postsMessage:req.flash("postsMessage")[0]
           });
     });
   });
@@ -65,3 +69,20 @@ function isLoggedIn(req, res, next) {
 }
 
 module.exports = router;
+
+function createSearch(queries){
+  var findPost = {};
+  if(queries.searchType && queries.searchText && queries.searchText.length >= 2){
+    var searchTypes = queries.searchType.toLowerCase().split(",");
+    var postQueries = [];
+    if(searchTypes.indexOf("title")>=0){
+      postQueries.push({ title : { $regex : new RegExp(queries.searchText, "i") } });
+    }
+    if(searchTypes.indexOf("body")>=0){
+      postQueries.push({ body : { $regex : new RegExp(queries.searchText, "i") } });
+    }
+    if(postQueries.length > 0) findPost = {$or:postQueries};
+  }
+  return { searchType:queries.searchType, searchText:queries.searchText,
+    findPost:findPost};
+}
