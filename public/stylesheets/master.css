@@ -34,6 +34,9 @@ a{
 a:hover{
   text-decoration:none;
 }
+.footer_a:hover{
+  text-decoration: underline;
+}
 ul{
   list-style-type: none;
   padding:0;
@@ -251,10 +254,12 @@ button[disabled]:hover{
   -moz-appearance: none;
   appearance: none;
   border: 1px solid #ccc;
-  border-radius: 0;
+  border-radius: 10px;
   background-color: white;
   padding: 0px 3px;
-  width: 70px;
+  padding-left: 7px;
+  margin-right: 5px;
+  width: 80px;
   height:19px;
 }
 .posts .index .search select::after{
@@ -263,12 +268,16 @@ button[disabled]:hover{
 .posts .index .search input[type='text']{
   float: left;
   margin-left: 2px;
-  border: 1px solid #ccc;
+  border: none;
+  border-bottom: 1px solid #ccc;
   border-radius: 0;
   background-color: white;
   padding: 1px 3px;
-  width: 120px;
+  width: 150px;
   height:15px;
+}
+input[type="searchText"] {
+  border: none;
 }
 select::-ms-expand { /* for IE 11 */
     display: none;
@@ -281,6 +290,10 @@ select::-ms-expand { /* for IE 11 */
 }
 .posts .index .comments{
   font-size: 10px;
+}
+.commentSpan{
+  color: #D63C63;
+  font-size: 3px;
 }
 .posts .show .content{
   padding: 6px 15px 20px;
@@ -314,7 +327,7 @@ select::-ms-expand { /* for IE 11 */
   margin-bottom: 10px;
 }
 .posts .show .comments form{
-  display: inline-block;
+  display: inline-flex;
   position : relative;
 }
 .posts .show .comment .body{
@@ -324,7 +337,7 @@ select::-ms-expand { /* for IE 11 */
 }
 .posts .show .comment .delete button{
   position:relative;
-  padding: 0px 2px 3px 1px;
+  padding: 0px 1px 3px 1px;
   line-height: 10px;
   min-width: 0;
   font-size: 13px;
@@ -344,4 +357,7 @@ select::-ms-expand { /* for IE 11 */
 }
 .commentTime{
   font-size:.75em
+}
+.note{
+  color:red
 }

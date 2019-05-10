@@ -55,7 +55,7 @@
                 <b><%= comment.author.nickname %></b>
                 <span class="commentTime">(<%= post.getCreatedTime(comment.createdAt) %> , &ensp;
                 <%= post.getCreatedDate(comment.createdAt) %>)
-                <% if(user && user.equals(comment.author._id)) { %></span>
+                <% if((user && user.equals(comment.author._id))||(user && user.equals(post.author._id))) { %></span>
                   <form class="delete" method="post"
                     action="/posts/<%=post._id%>/comments/<%=comment._id%>?_method=delete&<%= urlQuery %>">
                     <button type="button"
@@ -71,7 +71,7 @@
       <% } %>
       <form class="addComment checkValidation"
           action="/posts/<%=post._id%>/comments?<%= urlQuery %>" method="post">
-          <textarea class="cvRequired" type="text" name="comment[body]"
+          <textarea class= <%= user?"cvRequired":"note" %> type="text" name="comment[body]"
             cvRqErrMsg="comments is empty." cvRqErrTo="#cvErrTitle" <%= user?"":"disabled" %>
             placeholder="<%= user?"Add comment here":"Please login to make a comment" %>"></textarea>
           <button type="submit" <%= user?"":"disabled" %>>Comment</button>

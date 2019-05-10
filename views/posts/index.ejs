@@ -36,7 +36,7 @@
     </colgroup>
     <thead>
       <tr>
-        <th>Num</th>
+        <th>No.</th>
         <th>Title</th>
         <th>Views</th>
         <th>Date</th>
@@ -54,7 +54,7 @@
           <td><%= post.numId %></td>
           <td class="highlight" data-highlight="<%= search.highlight.title %>">
             <%= post.title %>
-            <span class="comments"><%= post.comments.length > 0 ? "[" + post.comments.length + "]" : "" %></span>
+            <span class="commentSpan"><%= post.comments.length ? "[" + post.comments.length + "]" : "" %></span>
           </td>
           <td><%= post.views %></td>
           <td><%= post.getCreatedDate() %></td>

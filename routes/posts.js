@@ -9,7 +9,7 @@ var User     = require('../models/User');
 router.get('/', function(req,res){
   var vistorCounter = null;
   var page = Math.max(1,req.query.page)>1?parseInt(req.query.page):1;
-  var limit = Math.max(1,req.query.limit)>1?parseInt(req.query.limit):5;
+  var limit = Math.max(1,req.query.limit)>1?parseInt(req.query.limit):10;
   var search = createSearch(req.query);
 
   async.waterfall([function(callback){
