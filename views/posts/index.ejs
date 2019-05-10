@@ -28,13 +28,17 @@
   </div>
   <table>
     <colgroup>
+      <col class="num"/>
       <col class="title"/>
+      <col class="views"/>
       <col class="date"/>
       <col class="author"/>
     </colgroup>
     <thead>
       <tr>
+        <th>Num</th>
         <th>Title</th>
+        <th>Views</th>
         <th>Date</th>
         <th>Author</th>
       </tr>
@@ -47,9 +51,14 @@
       <% } %>
       <% posts.forEach(function(post){ %>
         <tr onclick="window.location = '/posts/<%= post._id %>?<%= urlQuery %>'">
-          <td><%= post.title %></td>
+          <td><%= post.numId %></td>
+          <td class="highlight" data-highlight="<%= search.highlight.title %>">
+            <%= post.title %>
+            <span class="comments"><%= post.comments.length > 0 ? "[" + post.comments.length + "]" : "" %></span>
+          </td>
+          <td><%= post.views %></td>
           <td><%= post.getCreatedDate() %></td>
-          <td><%= post.author.nickname %></td>
+          <td class="highlight" data-highlight="<%= search.highlight.author %>"><%= post.author.nickname %></td>
         </tr>
       <% }) %>
     </tbody>
@@ -81,7 +90,7 @@
     </div>
     <div class="search float_right">
       <form class="checkValidation" action="/posts/" id="search">
-        <select name="searchType">
+        <select name="searchType" <%= search.searchType=="author!"?"disabled":"" %>>
           <% var select %>
           <option value="title,body"
             <%= search.searchType=="title,body"?select="selected":"" %>>Title+Body</option>
@@ -89,18 +98,28 @@
             <%= search.searchType=="title"?select="selected":"" %>>Title</option>
           <option value="body"
             <%= search.searchType=="body"?select="selected":"" %>>Body</option>
+          <%if(search.searchType=="author!"){%>
+            <option value="author!"
+              <%= search.searchType=="author!"?select="selected":"" %>>Author</option>
+          <%} else {%>
+            <option value="author"
+              <%= search.searchType=="author"?select="selected":"" %>>Author</option>
+          <%}%>
         </select>
-        <input class="cvMinLength" cvMinLength="3"
+        <input class="cvMinLength" cvMinLength="2"
           cvMinLenErrTo="#searchError"
-          cvMinLenErrMsg="It should be at least 3 characters"
-          type="text" name="searchText" value="<%= select?search.searchText:"" %>">
-        <button type="submit">search</button>
+          cvMinLenErrMsg="It should be at least 2 characters"
+          type="text" name="searchText" value="<%= select?search.searchText:"" %>"
+          <%= search.searchType=="author!"?"disabled":"" %>>
+        <button type="submit" <%= search.searchType=="author!"?"disabled":"" %>>search</button>
+        <%if(search.searchType){%>
+          <button type="button" onclick="window.location = '/posts?page=1'">cancel</button>
+        <%}%>
         <div class="message" id="searchError"></div>
       </form>
     </div>
   </div>
 </div>
-
 <!-- main end -->
     </div><!--posts end -->
     <footer>

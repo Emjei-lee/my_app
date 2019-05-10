@@ -1,3 +1,21 @@
+Skip to content
+
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+
+@Emjei-lee
+6
+12 10 imtaekh/my_app
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
+my_app/public/stylesheets/master.css
+@imtaekh imtaekh comments added
+4485452 on 18 Jul 2016
+320 lines (318 sloc)  5.09 KB
+
 *{
   outline: none;
 }
@@ -14,7 +32,7 @@ a{
   color:inherit;
 }
 a:hover{
-  text-decoration:underline;
+  text-decoration:none;
 }
 ul{
   list-style-type: none;
@@ -38,6 +56,14 @@ h3{
   background-color: #F5F5F5;
   padding: 5px 15px;
 }
+h4{
+  margin: 0;
+}
+textarea, input{
+  padding: 3px 7px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
 footer{
   text-align:center;
   padding: 10px 0;
@@ -55,10 +81,17 @@ footer{
   clear: both;
   color: tomato;
 }
+.searchHighligt {
+  background-color: yellow;
+}
 table{
   width: 100%;
   border-collapse: collapse;
   border-top: 1px solid #ccc;
+}
+table colgroup .num,
+table colgroup .views {
+  width: 70px;
 }
 table colgroup .date {
   width: 100px;
@@ -75,11 +108,11 @@ table td, th{
 table thead tr{
   background-color: #F5F5F5;
 }
-table tbody tr:hover td:first-child{
-  text-decoration: underline;
+table tbody tr:hover td:first-child+td{
+  text-decoration: none;
 }
 table tbody tr.noData,
-table tbody tr.noData:hover td:first-child,
+table tbody tr.noData:hover td:first-child+td,
 table tbody tr.noData td{
   cursor:default;
   text-decoration: none;
@@ -87,13 +120,20 @@ table tbody tr.noData td{
   text-align: center;
 }
 table tbody td{
+  text-align: center;
   cursor:pointer;
 }
 table tbody tr:nth-child(odd){
   background-color: #F4FFFF;
 }
-table tbody td+td{
-  text-align: center;
+table tbody tr:hover{
+  background-color: #F5F5F5;
+}
+table tbody tr:nth-child(odd):hover{
+  background-color: #F5F5F5;
+}
+table tbody td:first-child+td{
+  text-align: left;
 }
 .floats:after{
   content: "";
@@ -117,18 +157,12 @@ table tbody td+td{
   float:right;
   width: 180px;
   height: 20px;
-  padding: 3px 7px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
   margin: 3px 0;
 }
 .inputs textarea{
   float:right;
   resize: vertical;
   width: 245px;
-  padding: 3px 7px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
   margin: 3px 0;
   height: 100px;
 }
@@ -166,6 +200,16 @@ button:hover{
   border-top: 1px solid #aaa;
   border-left: 1px solid #aaa;
 }
+button[disabled]{
+  color: #999 !important;
+}
+button[disabled]:hover{
+  top: 0 !important;
+  left: 0 !important;
+  border: 1px solid #ccc !important;
+  border-right: 1px solid #aaa !important;
+  border-bottom: 1px solid #aaa !important;
+}
 .pagination{
   text-align: center;
 }
@@ -181,37 +225,19 @@ button:hover{
 }
 .posts .index,
 .posts .show{
-  width: 600px;
+  width: 700px;
   margin: 0 auto;
 }
 .posts .new,
 .posts .edit{
-  width: 400px;
+  width: 600px;
   margin: 0 auto;
 }
-.posts .show .content{
-  padding: 6px 15px;
-  border-bottom: 1px solid #ccc;
-}
-.posts .show .body{
-  white-space:pre-line;
-}
-.posts .show .info>div{
-  margin:5px;
-  padding: 5px 10px;
-  background-color: #E4E4E4;
-  border: 0 solid black;
-  border-radius: 5px;
-}
-.posts .show .info .timestamp span{
-  display: inline-block;
-  width: 50px;
-}
 .posts input{
-  width: 280px;
+  width: 480px;
 }
 .posts textarea{
-  width: 280px;
+  width: 480px;
 }
 .posts .index .counter{
   padding-left: 10px;
@@ -247,9 +273,75 @@ button:hover{
 select::-ms-expand { /* for IE 11 */
     display: none;
 }
-.posts .index .search button[type='submit']{
+.posts .index .search button{
   float: left;
   color: #714d4d;
   padding: 2px;
   margin-left: 2px;
+}
+.posts .index .comments{
+  font-size: 10px;
+}
+.posts .show .content{
+  padding: 6px 15px 20px;
+  border-bottom: 1px solid #ccc;
+}
+.posts .show .body{
+  white-space:pre-line;
+}
+.posts .show .info>div{
+  margin:5px;
+  padding: 5px 10px;
+  background-color: #E4E4E4;
+  border: 0 solid black;
+  border-radius: 5px;
+}
+.posts .show .info .timestamp span{
+  display: inline-block;
+  width: 50px;
+}
+.posts .show .comments{
+  padding-top: 20px;
+  clear: both;
+}
+.posts .show .comments h4{
+  width: 630px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+}
+.posts .show .comments .comment{
+  margin-bottom: 10px;
+}
+.posts .show .comments form{
+  display: inline-block;
+  position : relative;
+}
+.posts .show .comment .body{
+  word-break: break-all;
+  margin-left: 5px;
+  width: 545px;
+}
+.posts .show .comment .delete button{
+  position:relative;
+  padding: 0px 2px 3px 1px;
+  line-height: 10px;
+  min-width: 0;
+  font-size: 13px;
+  color:red;
+}
+.posts .show .addComment textarea{
+  width: 544px;
+  padding-left: 3px;
+  resize: vertical;
+}
+.posts .show .addComment textarea[disabled]{
+  background-color:white
+}
+.posts .show .addComment button{
+  margin-left: 5px;
+  float:right;
+}
+.commentTime{
+  font-size:.75em
 }
